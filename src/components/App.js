@@ -1,6 +1,6 @@
 import React, { useState,useReducer } from "react";
 import "./../styles/App.css";
-
+// import Select from './Select'
 
 const states = [{
 	name : "Madhya Pradesh",
@@ -138,15 +138,60 @@ const states = [{
 }];
 
 
-function App() 
-{
+function App() {
+	const [cityArr, setCityArr] = useState(states[0].city);
+	const [townArr, setTownArr] = useState(states[0].city[0].landmarks);
+	const [currentState, setCurrentState] = useState(0);
+	const [currentCity, setCurrentCity] = useState(0);
+	const [currentLandmark, setCurrentLandmark] = useState(0);
+	const handleState = (event)=>{
+		let tempState = event.target.value;
+		setCityArr(states[tempState].city);
+		setTownArr(states[tempState].city[0].landmarks);
+		setCurrentState(tempState);
+	}
+
+	const handleCity = (event)=>{
+		let tempCity = event.target.value;
+		setTownArr(cityArr[tempCity].landmarks);
+		setCurrentCity(tempCity);
+	}
+
+	const handleTown = (event)=>{
+		let tempTown = event.target.value;
+		setCurrentLandmark(tempTown);
+	}
 	// Do not alter/remove main div
 	return (
-	<div id="main">
-		
-	</div>
+		<div id="main">
+			<span> State : </span>
+			<select id="state" onChange={handleState}>
+				{states.map((ele, index)=>(<option key={index} value={index}>{ele.name}</option>))}
+			</select><br></br><br></br>
+			<span> Cities : </span>
+			<select id="city" onChange={handleCity}>
+				{cityArr.map((ele, index)=>(<option key={index} value={index}>{ele.name}</option>))}
+			</select><br></br><br></br>
+			<span> Towns : </span>
+			<select id="landmark" onChange={handleTown}>
+				{townArr.map((ele, index)=>(<option key={index} value={index}>{ele.name}</option>))}
+			</select><br></br><br></br>
+			<div id="state-title" style={{height:"10rem", border:"black 1px solid", margin:"1rem"}}>
+				<div id="state-name">{states[currentState].name}</div>
+				<div id="state-description">{states[currentState].description}</div>
+			</div>
+			<div id="city-title" style={{height:"10rem", border:"black 1px solid", margin:"1rem"}}>
+				<div id="city-name">{states[currentState].city[currentState].name}</div>
+				<div id="city-description">{states[currentState].city[currentState].description}</div>
+			</div>
+			<div id="landmark-title" style={{height:"10rem", border:"black 1px solid", margin:"1rem"}}>
+				<div id="landmark-name">{states[currentState].city[currentCity].landmarks[currentLandmark].name}</div>
+				<div id="landmark-description">{states[currentState].city[currentCity].landmarks[currentLandmark].description}</div>
+			</div>
+		</div>
 	);
 }
 
 
 export default App;
+
